@@ -56,9 +56,9 @@
 		654B36251B85E6C100FAA212 = {
 			isa = PBXGroup;
 			children = (
-				654B365C1B85EAED00FAA212 /* EthanolUtilities.framework */,
 				654B36311B85E6C100FAA212 /* EthanolContacts */,
 				654B363D1B85E6C100FAA212 /* EthanolContactsTests */,
+				654B366B1B85F11900FAA212 /* Dependencies */,
 				654B36301B85E6C100FAA212 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,6 +88,14 @@
 				654B36401B85E6C100FAA212 /* Info.plist */,
 			);
 			path = EthanolContactsTests;
+			sourceTree = "<group>";
+		};
+		654B366B1B85F11900FAA212 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				654B365C1B85EAED00FAA212 /* EthanolUtilities.framework */,
+			);
+			name = Dependencies;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
