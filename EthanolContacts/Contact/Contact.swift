@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Contacts
 
 public struct  ContactProperty : OptionSetType {
   
@@ -15,15 +16,16 @@ public struct  ContactProperty : OptionSetType {
   public init(rawValue newRawValue:UInt) {
     rawValue = newRawValue
   }
+  static let None = ContactProperty(rawValue: 0)
   static let FirstName = ContactProperty(rawValue: 1 << 0)
-  static let MiddleName = ContactProperty(rawValue: 1 << 2)
   static let LastName = ContactProperty(rawValue: 1 << 1)
+  static let MiddleName = ContactProperty(rawValue: 1 << 2)
   static let Prefix = ContactProperty(rawValue: 1 << 3)
   static let Suffix = ContactProperty(rawValue: 1 <<  4)
   static let Nickname = ContactProperty(rawValue: 1 <<  5)
   static let FirstNamePhonetic = ContactProperty(rawValue: 1 <<  6)
-  static let MiddleNamePhonetic = ContactProperty(rawValue: 1 <<  8)
   static let LastNamePhonetic = ContactProperty(rawValue: 1 <<  7)
+  static let MiddleNamePhonetic = ContactProperty(rawValue: 1 <<  8)
   static let Organization = ContactProperty(rawValue: 1 <<  9)
   static let JobTitle = ContactProperty(rawValue: 1 <<  10)
   static let Department = ContactProperty(rawValue: 1 <<  11)

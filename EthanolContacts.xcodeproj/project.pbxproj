@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		650FE2BA1B85F5220019DBDA /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650FE2B91B85F5220019DBDA /* Contact.swift */; };
 		650FE2BC1B85F5410019DBDA /* ContactFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650FE2BB1B85F5410019DBDA /* ContactFetcher.swift */; };
-		650FE2BE1B85F56B0019DBDA /* PhoneContactFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650FE2BD1B85F56B0019DBDA /* PhoneContactFetcher.swift */; };
+		650FE2C01B8603410019DBDA /* PhoneContactFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650FE2BF1B8603410019DBDA /* PhoneContactFetcher.swift */; };
 		654B36331B85E6C100FAA212 /* EthanolContacts.h in Headers */ = {isa = PBXBuildFile; fileRef = 654B36321B85E6C100FAA212 /* EthanolContacts.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		654B363A1B85E6C100FAA212 /* EthanolContacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 654B362F1B85E6C100FAA212 /* EthanolContacts.framework */; };
 		654B363F1B85E6C100FAA212 /* EthanolContactsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654B363E1B85E6C100FAA212 /* EthanolContactsTests.swift */; };
@@ -29,7 +29,7 @@
 /* Begin PBXFileReference section */
 		650FE2B91B85F5220019DBDA /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		650FE2BB1B85F5410019DBDA /* ContactFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactFetcher.swift; sourceTree = "<group>"; };
-		650FE2BD1B85F56B0019DBDA /* PhoneContactFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneContactFetcher.swift; sourceTree = "<group>"; };
+		650FE2BF1B8603410019DBDA /* PhoneContactFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneContactFetcher.swift; sourceTree = "<group>"; };
 		654B362F1B85E6C100FAA212 /* EthanolContacts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EthanolContacts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		654B36321B85E6C100FAA212 /* EthanolContacts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EthanolContacts.h; sourceTree = "<group>"; };
 		654B36341B85E6C100FAA212 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -62,18 +62,10 @@
 		650FE2B61B85F5070019DBDA /* ContactFetcher */ = {
 			isa = PBXGroup;
 			children = (
-				650FE2B71B85F5070019DBDA /* PhoneContactFetcher */,
 				650FE2BB1B85F5410019DBDA /* ContactFetcher.swift */,
+				650FE2BF1B8603410019DBDA /* PhoneContactFetcher.swift */,
 			);
 			path = ContactFetcher;
-			sourceTree = "<group>";
-		};
-		650FE2B71B85F5070019DBDA /* PhoneContactFetcher */ = {
-			isa = PBXGroup;
-			children = (
-				650FE2BD1B85F56B0019DBDA /* PhoneContactFetcher.swift */,
-			);
-			path = PhoneContactFetcher;
 			sourceTree = "<group>";
 		};
 		650FE2B81B85F5070019DBDA /* Contact */ = {
@@ -239,7 +231,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				650FE2BE1B85F56B0019DBDA /* PhoneContactFetcher.swift in Sources */,
+				650FE2C01B8603410019DBDA /* PhoneContactFetcher.swift in Sources */,
 				650FE2BC1B85F5410019DBDA /* ContactFetcher.swift in Sources */,
 				650FE2BA1B85F5220019DBDA /* Contact.swift in Sources */,
 			);
