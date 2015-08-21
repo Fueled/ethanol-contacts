@@ -20,7 +20,6 @@ public class PhoneContactFetcher: NSObject, ContactFetcher {
   let store = CNContactStore()
 
   public var isAuthorized:Bool = false
-
   public func fetchContactsForProperties(properties: ContactProperty, success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
     if isAuthorized {
       do {
@@ -30,7 +29,6 @@ public class PhoneContactFetcher: NSObject, ContactFetcher {
         let contacts = try self.store.unifiedContactsMatchingPredicate(predicate, keysToFetch: keysToFetch)
         
         var contactsArray: Array<Contact> = Array()
-
         for contact in contacts {
           let myContact = Contact()
           myContact.firstName = contact.givenName

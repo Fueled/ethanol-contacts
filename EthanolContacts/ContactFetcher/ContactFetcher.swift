@@ -67,7 +67,7 @@ public protocol ContactFetcher {
   func authorizeWithCompletion(success success: ETHContactFetcherAuthorizeSuccessBlock, failure: ETHContactFetcherFailureBlock);
 }
 
-
+/**  */
 extension ContactFetcher {
  public func fetchContactsWithCompletion(success success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
     self.fetchContactsForProperties(ContactProperty.AllProperties, success: success, failure: failure)
