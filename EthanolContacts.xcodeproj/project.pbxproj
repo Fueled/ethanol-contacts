@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		32C2BFFF1B8B5212004EBA06 /* PhoneContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C2BFFE1B8B5212004EBA06 /* PhoneContact.swift */; };
 		650FE2BA1B85F5220019DBDA /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650FE2B91B85F5220019DBDA /* Contact.swift */; };
 		650FE2BC1B85F5410019DBDA /* ContactFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650FE2BB1B85F5410019DBDA /* ContactFetcher.swift */; };
 		650FE2C01B8603410019DBDA /* PhoneContactFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650FE2BF1B8603410019DBDA /* PhoneContactFetcher.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		32C2BFFE1B8B5212004EBA06 /* PhoneContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneContact.swift; sourceTree = "<group>"; };
 		650FE2B91B85F5220019DBDA /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		650FE2BB1B85F5410019DBDA /* ContactFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactFetcher.swift; sourceTree = "<group>"; };
 		650FE2BF1B8603410019DBDA /* PhoneContactFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneContactFetcher.swift; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				650FE2B91B85F5220019DBDA /* Contact.swift */,
+				32C2BFFE1B8B5212004EBA06 /* PhoneContact.swift */,
 			);
 			path = Contact;
 			sourceTree = "<group>";
@@ -234,6 +237,7 @@
 				650FE2C01B8603410019DBDA /* PhoneContactFetcher.swift in Sources */,
 				650FE2BC1B85F5410019DBDA /* ContactFetcher.swift in Sources */,
 				650FE2BA1B85F5220019DBDA /* Contact.swift in Sources */,
+				32C2BFFF1B8B5212004EBA06 /* PhoneContact.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,6 +363,7 @@
 				);
 				INFOPLIST_FILE = EthanolContacts/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Fueled.EthanolContacts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -381,6 +386,7 @@
 				);
 				INFOPLIST_FILE = EthanolContacts/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Fueled.EthanolContacts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
