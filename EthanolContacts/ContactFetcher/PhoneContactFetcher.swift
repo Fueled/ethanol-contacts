@@ -74,7 +74,7 @@ let CNContactKeysFromContactProperties = { (properties: ContactProperty) -> [CNK
     keys.append(CNContactNameSuffixKey)
   }
   if properties.contains(ContactProperty.Nickname) {
-    keys.append(CNContactPostalAddressesKey)
+    keys.append(CNContactNicknameKey)
   }
 
   if properties.contains(ContactProperty.PhoneticGivenName) {
@@ -140,10 +140,6 @@ let CNContactKeysFromContactProperties = { (properties: ContactProperty) -> [CNK
 
   if properties.contains(ContactProperty.ThumbnailImage) || properties.contains(ContactProperty.ThumbnailImageURL) {
     keys.append(CNContactThumbnailImageDataKey)
-  }
-
-  if properties.contains(ContactProperty.UserName) {
-    keys.append(CNContactNicknameKey)
   }
 
   return keys

@@ -59,6 +59,8 @@ public struct  ContactProperty : OptionSetType {
   static let Identifier = ContactProperty(rawValue: 1 << 29)
 
   static let AllProperties:ContactProperty = [.GivenName, .FamilyName, .MiddleName, .NamePrefix, .NameSuffix, .Nickname, .PhoneticGivenName, .PhoneticFamilyName, .PhoneticMiddleName, .OrganizationName, .JobTitle, .DepartmentName, .BirthdayDate, .Emails, .Addresses, .Phone, .Note, .Kind, .DateList, .InstantMessageIdentifiers, .URLs, .SocialNetworkProfiles, .RelatedNames, .OriginalImage, .OriginalImageURL, .ThumbnailImage, .ThumbnailImageURL, .UserName, .Identifier]
+
+  static let BasicProperties:ContactProperty = [.GivenName, .FamilyName, .MiddleName, .BirthdayDate, .Emails, .Addresses, .Phone, .OriginalImage, .ThumbnailImage, .UserName, .Identifier]
 }
 
 /**
