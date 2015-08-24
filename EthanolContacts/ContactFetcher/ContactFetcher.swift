@@ -69,7 +69,7 @@ public protocol ContactFetcher {
 
 
 extension ContactFetcher {
-  func fetchContactsWithCompletion(success success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
+ public func fetchContactsWithCompletion(success success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
     self.fetchContactsForProperties(ContactProperty.AllProperties, success: success, failure: failure)
   }
 }
