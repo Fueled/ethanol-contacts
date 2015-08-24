@@ -8,6 +8,87 @@
 
 import Foundation
 import Contacts
+import AddressBook
+
+@objc class PhoneContact: NSObject, Contact {
+  var identifier: String
+
+  var userName: String?
+
+  var givenName: String
+  var middleName: String
+  var familyName: String
+
+  var namePrefix: String
+  var nameSuffix: String
+  var nickname: String
+
+  var phoneticGivenName: String
+  var phoneticMiddleName: String
+  var phoneticFamilyName: String
+
+  var organizationName: String
+  var jobTitle: String
+  var departmentName: String
+
+  var note: String
+
+  var emails: Array<String>?
+  var birthdayDate: NSDate?
+
+  var addresses: Array<String>?
+
+  var kind: ContactType
+
+  var dateList: Array<NSDate>?
+
+  var phone: Array<String>?
+
+  var instantMessageIdentifiers: Array<String>?
+
+  var urls: Array<String>?
+  var socialNetworkProfiles: Array<String>?
+
+  var relatedNames: Array<String>?
+
+  var originalImage: UIImage?
+  var originalImageURL: NSURL?
+
+  var thumbnailImage: UIImage?
+  var thumbnailImageURL: NSURL?
+
+  override init() {
+    self.identifier = ""
+
+    self.givenName = ""
+    self.middleName = ""
+    self.familyName = ""
+
+    self.namePrefix = ""
+    self.nameSuffix = ""
+
+    self.nickname = ""
+
+    self.phoneticFamilyName = ""
+    self.phoneticGivenName = ""
+    self.phoneticMiddleName = ""
+
+    self.organizationName = ""
+    self.jobTitle = ""
+    self.departmentName = ""
+
+    self.note = ""
+
+    self.kind = ContactType.Unknown
+
+    super.init()
+  }
+
+  convenience init(person:ABRecordRef) {
+    self.init()
+    //TODO: add Mapping
+  }
+}
 
 @available(iOS 9.0, *)
 extension Array where Element : CNLabeledValue {

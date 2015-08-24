@@ -8,24 +8,154 @@
 
 import UIKit
 import Contacts
+import AddressBook
 
 public class PhoneAddressBookFetcher:NSObject, ContactFetcher {
 
   static let internalAddressBookFetcher = PhoneAddressBookFetcher()
-
-  public var isAuthorized:Bool = false
-
   public static var contactFetcher: ContactFetcher {
     return internalAddressBookFetcher
   }
 
-  public func fetchContactsForProperties(properties: ContactProperty, success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
+  var addressBook:ABAddressBookRef?
 
+  public var isAuthorized:Bool {
+    return ABAddressBookGetAuthorizationStatus() == ABAuthorizationStatus.Authorized
+  }
+  public func fetchContactsForProperties(properties: ContactProperty, success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
+    if isAuthorized {
+      do {
+        let contacts = try self.contactsFromAddressBookWithGivenProperties(properties)
+        success(contacts: contacts)
+      } catch {
+        failure(error: self.errorWithInfo("something happened", "contacts werent fetched"))
+      }
+    } else {
+      authorizeWithCompletion(success: { () -> () in
+        self.fetchContactsForProperties(properties, success: success, failure: failure)
+        }, failure: { (error) -> Void in
+          failure(error: error)
+      })
+    }
   }
 
   public func authorizeWithCompletion(success successBlock: ETHContactFetcherAuthorizeSuccessBlock, failure: ETHContactFetcherFailureBlock) {
 
+    guard let thisAddressBook = ABAddressBookCreate() as? ABAddressBook else {
+      failure(error: self.errorWithInfo("EthanolContactAuthorizationFailed", "EthanolContactAddressBookFailedToCreate"))
+      return
+    }
+
+    self.addressBook = thisAddressBook
+
+    if(isAuthorized) {
+      successBlock()
+    } else {
+      let completionHandler:ABAddressBookRequestAccessCompletionHandler = { (granted:Bool, error:CFError!) -> Void in
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+          if let error = error {
+            failure(error: (error as NSError))
+          } else if(!granted) {
+            failure(error: self.errorWithInfo("EthanolContactFetchFailed", "EthanolContactPhoneNotAllowed"))
+          } else {
+            successBlock()
+          }
+        })
+      }
+      ABAddressBookRequestAccessWithCompletion(thisAddressBook, completionHandler)
+    }
   }
+
+  func errorWithInfo(description:String, _ reason:String) -> NSError {
+    let userInfo = [NSLocalizedDescriptionKey: description, NSLocalizedFailureReasonErrorKey: reason]
+    return NSError(domain: "com.fueled.Ethanol", code: 1214, userInfo: userInfo)
+  }
+
+  func contactsFromAddressBookWithGivenProperties(propertiesFlag:ContactProperty) throws -> [Contact] {
+    guard let thisAddressBook = self.addressBook else {
+      throw self.errorWithInfo("EthanolContactFetchFailed", "SomethingWentWrong")
+    }
+
+    var contacts:[Contact] = []
+    let people = ABAddressBookCopyArrayOfAllPeople(thisAddressBook) as! CFArray
+    let count = CFArrayGetCount(people)
+    for index in 0...count {
+      if let thisPerson = CFArrayGetValueAtIndex(people, index) as? ABRecordRef {
+        print("look: \(thisPerson)")
+        let aContact = PhoneContact(person: thisPerson)
+        contacts.append(aContact)
+      }
+    }
+
+    if contacts.count > 0 {
+      return contacts
+    }
+
+//    NSMutableArray * contacts = [NSMutableArray array];
+//    CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
+//    CFIndex peopleCount = CFArrayGetCount(people);
+//    for(CFIndex i = 0;i < peopleCount;i++) {
+//      ETHContact * contact = [[ETHFramework injector] instanceForClass:[ETHContact class]];
+//      ABRecordRef person = CFArrayGetValueAtIndex(people, i);
+//
+//      if(!!(propertiesFlag & ETHContactIdentifier)) {
+//        contact.id = [NSString stringWithFormat:@"%lu", (unsigned long)ABRecordGetRecordID(person)];
+//      }
+//
+//      CONDITIONAL_ASSIGN(FirstName, NSString);
+//      CONDITIONAL_ASSIGN(LastName, NSString);
+//      CONDITIONAL_ASSIGN(MiddleName, NSString);
+//      CONDITIONAL_ASSIGN(Prefix, NSString);
+//      CONDITIONAL_ASSIGN(Suffix, NSString);
+//      CONDITIONAL_ASSIGN(Nickname, NSString);
+//      CONDITIONAL_ASSIGN(FirstNamePhonetic, NSString);
+//      CONDITIONAL_ASSIGN(LastNamePhonetic, NSString);
+//      CONDITIONAL_ASSIGN(MiddleNamePhonetic, NSString);
+//      CONDITIONAL_ASSIGN(Organization, NSString);
+//      CONDITIONAL_ASSIGN(JobTitle, NSString);
+//      CONDITIONAL_ASSIGN(Department, NSString);
+//      CONDITIONAL_ASSIGN(Birthday, NSDate);
+//      CONDITIONAL_ASSIGN(Note, NSString);
+//      CONDITIONAL_ASSIGN(CreationDate, NSString);
+//      CONDITIONAL_ASSIGN(ModificationDate, NSString);
+//
+//      contact.kind = ETHContactKindUnknown;
+//      if(!!(propertiesFlag & ETHContactKind)) {
+//        CFNumberRef numberType = ABRecordCopyValue(person, kABPersonKindProperty);
+//        if(numberType == kABPersonKindPerson) {
+//          contact.kind = ETHContactKindPerson;
+//        } else if(numberType == kABPersonKindOrganization) {
+//          contact.kind = ETHContactKindOrganization;
+//        }
+//        CFRelease(numberType);
+//      }
+//
+//      CONDITIONAL_MULTI_ASSIGN(Emails, Email, NSString);
+//      CONDITIONAL_MULTI_ASSIGN(Dates, Date, NSDate);
+//      CONDITIONAL_MULTI_ASSIGN(Phones, Phone, NSString);
+//      CONDITIONAL_MULTI_ASSIGN(SocialProfiles, InstantMessage, NSDictionary);
+//      CONDITIONAL_MULTI_ASSIGN(InstantMessageIdentifiers, SocialProfile, NSDictionary);
+//      CONDITIONAL_MULTI_ASSIGN_PROP(URLs, URL, NSString, @"urls");
+//      CONDITIONAL_MULTI_ASSIGN(RelatedNames, RelatedNames, NSString);
+//
+//      if(!!(propertiesFlag & ETHContactOriginalImage)) {
+//        contact.originalImage = [UIImage imageWithData:(__bridge_transfer NSData *)ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatOriginalSize)];
+//      }
+//
+//      if(!!(propertiesFlag & ETHContactThumbnailImage)) {
+//        contact.thumbnailImage = [UIImage imageWithData:(__bridge_transfer NSData *)ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail)];
+//      }
+//      
+//      [contacts addObject:contact];
+//    }
+//    CFRelease(people);
+//    
+//    return contacts;
+
+
+    throw self.errorWithInfo("EthanolContactFetchFailed", "SomethingWentWrong")
+  }
+  
 }
 
 @available(iOS 9.0, *)
