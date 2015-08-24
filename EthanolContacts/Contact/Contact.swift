@@ -11,9 +11,9 @@ import Contacts
 
 public struct  ContactProperty : OptionSetType {
   
-  public let rawValue: UInt
+  public let rawValue: Int
   
-  public init(rawValue newRawValue:UInt) {
+  public init(rawValue newRawValue:Int) {
     rawValue = newRawValue
   }
   static let None = ContactProperty(rawValue: 0)

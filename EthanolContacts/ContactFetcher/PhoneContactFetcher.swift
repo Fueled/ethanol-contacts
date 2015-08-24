@@ -25,18 +25,9 @@ public class PhoneContactFetcher: NSObject, ContactFetcher {
       do {
         
         let predicate = NSPredicate(value: true)
-        let keysToFetch = self.CNContactKeysFromContactProperties(properties)
+        let keysToFetch = CNContactKeysFromContactProperties(properties)
         let contacts = try self.store.unifiedContactsMatchingPredicate(predicate, keysToFetch: keysToFetch)
-        
-        var contactsArray: Array<Contact> = Array()
-        for contact in contacts {
-          let myContact = Contact()
-          myContact.firstName = contact.givenName
-          contactsArray.append(myContact)
-        }
-        
-        success(contacts: contactsArray)
-        
+        success(contacts: contacts)
       } catch {
           // handle error
           print("error occured")
@@ -61,16 +52,27 @@ public class PhoneContactFetcher: NSObject, ContactFetcher {
       }
     }
   }
-  
-  private func CNContactKeysFromContactProperties(properties: ContactProperty) -> [CNKeyDescriptor] {
-    
-    var keys:[CNKeyDescriptor] = []
+}
 
-    if properties.contains(ContactProperty.Addresses) {
-        keys.append(CNContactPostalAddressesKey)
-    }
-    
-    return keys
+let CNContactKeysFromContactProperties = { (properties: ContactProperty) -> [CNKeyDescriptor] in
+  var keys:[CNKeyDescriptor] = []
+
+  if properties.contains(ContactProperty.Addresses) {
+    keys.append(CNContactPostalAddressesKey)
   }
 
+  return keys
 }
+
+//  private
+//extension ContactProperty {
+//  init(bitComponents : [Int]) {
+//    self = ContactProperty(rawValue: bitComponents.reduce(0, combine: (+)))
+//  }
+//
+//  func bitComponents() -> [Int] {
+//    let components = (0 ..< 8*sizeof(Int))
+//    let mappedComponents = components.map() { return (1 << $0) }
+//    return mappedComponents.filter() { self.contains(ContactProperty(rawValue: $0)) }
+//  }
+//}
