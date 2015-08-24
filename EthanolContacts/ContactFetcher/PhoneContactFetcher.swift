@@ -23,8 +23,8 @@ public class PhoneContactFetcher: NSObject, ContactFetcher {
   public func fetchContactsForProperties(properties: ContactProperty, success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
     if isAuthorized {
       do {
-        
-        let predicate = NSPredicate(value: true)
+        let defaultContainer = store.defaultContainerIdentifier()
+        let predicate = CNContact.predicateForContactsInContainerWithIdentifier(defaultContainer)
         let keysToFetch = CNContactKeysFromContactProperties(properties)
         let contacts = try self.store.unifiedContactsMatchingPredicate(predicate, keysToFetch: keysToFetch)
         success(contacts: contacts)
@@ -144,16 +144,3 @@ let CNContactKeysFromContactProperties = { (properties: ContactProperty) -> [CNK
 
   return keys
 }
-
-//  private
-//extension ContactProperty {
-//  init(bitComponents : [Int]) {
-//    self = ContactProperty(rawValue: bitComponents.reduce(0, combine: (+)))
-//  }
-//
-//  func bitComponents() -> [Int] {
-//    let components = (0 ..< 8*sizeof(Int))
-//    let mappedComponents = components.map() { return (1 << $0) }
-//    return mappedComponents.filter() { self.contains(ContactProperty(rawValue: $0)) }
-//  }
-//}
