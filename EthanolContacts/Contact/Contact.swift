@@ -15,51 +15,51 @@ public struct  ContactProperty : OptionSetType {
   public init(rawValue newRawValue:Int) {
     rawValue = newRawValue
   }
-  static let None = ContactProperty(rawValue: 0)
+  public static let None = ContactProperty(rawValue: 0)
 
-  static let GivenName = ContactProperty(rawValue: 1 << 1)
-  static let FamilyName = ContactProperty(rawValue: 1 << 2)
-  static let MiddleName = ContactProperty(rawValue: 1 << 3)
+  public static let GivenName = ContactProperty(rawValue: 1 << 1)
+  public static let FamilyName = ContactProperty(rawValue: 1 << 2)
+  public static let MiddleName = ContactProperty(rawValue: 1 << 3)
 
-  static let NamePrefix = ContactProperty(rawValue: 1 << 4)
-  static let NameSuffix = ContactProperty(rawValue: 1 << 5)
-  static let Nickname = ContactProperty(rawValue: 1 << 6)
+  public static let NamePrefix = ContactProperty(rawValue: 1 << 4)
+  public static let NameSuffix = ContactProperty(rawValue: 1 << 5)
+  public static let Nickname = ContactProperty(rawValue: 1 << 6)
 
-  static let PhoneticGivenName = ContactProperty(rawValue: 1 << 7)
-  static let PhoneticFamilyName = ContactProperty(rawValue: 1 << 8)
-  static let PhoneticMiddleName = ContactProperty(rawValue: 1 << 9)
+  public static let PhoneticGivenName = ContactProperty(rawValue: 1 << 7)
+  public static let PhoneticFamilyName = ContactProperty(rawValue: 1 << 8)
+  public static let PhoneticMiddleName = ContactProperty(rawValue: 1 << 9)
 
-  static let OrganizationName = ContactProperty(rawValue: 1 << 10)
-  static let JobTitle = ContactProperty(rawValue: 1 << 11)
-  static let DepartmentName = ContactProperty(rawValue: 1 << 12)
+  public static let OrganizationName = ContactProperty(rawValue: 1 << 10)
+  public static let JobTitle = ContactProperty(rawValue: 1 << 11)
+  public static let DepartmentName = ContactProperty(rawValue: 1 << 12)
 
-  static let BirthdayDate = ContactProperty(rawValue: 1 << 13)
+  public static let BirthdayDate = ContactProperty(rawValue: 1 << 13)
 
-  static let Emails = ContactProperty(rawValue: 1 << 14)
-  static let Addresses = ContactProperty(rawValue: 1 << 15)
-  static let Phone = ContactProperty(rawValue: 1 << 16)
+  public static let Emails = ContactProperty(rawValue: 1 << 14)
+  public static let Addresses = ContactProperty(rawValue: 1 << 15)
+  public static let Phone = ContactProperty(rawValue: 1 << 16)
 
-  static let Note = ContactProperty(rawValue: 1 << 17)
-  static let Kind = ContactProperty(rawValue: 1 << 18)
-  static let DateList = ContactProperty(rawValue: 1 << 19)
+  public static let Note = ContactProperty(rawValue: 1 << 17)
+  public static let Kind = ContactProperty(rawValue: 1 << 18)
+  public static let DateList = ContactProperty(rawValue: 1 << 19)
 
-  static let InstantMessageIdentifiers = ContactProperty(rawValue: 1 << 20)
-  static let URLs = ContactProperty(rawValue: 1 << 21)
-  static let SocialNetworkProfiles = ContactProperty(rawValue: 1 << 22)
-  static let RelatedNames = ContactProperty(rawValue: 1 << 23)
+  public static let InstantMessageIdentifiers = ContactProperty(rawValue: 1 << 20)
+  public static let URLs = ContactProperty(rawValue: 1 << 21)
+  public static let SocialNetworkProfiles = ContactProperty(rawValue: 1 << 22)
+  public static let RelatedNames = ContactProperty(rawValue: 1 << 23)
 
-  static let OriginalImage = ContactProperty(rawValue: 1 << 24)
-  static let OriginalImageURL = ContactProperty(rawValue: 1 << 25)
+  public static let OriginalImage = ContactProperty(rawValue: 1 << 24)
+  public static let OriginalImageURL = ContactProperty(rawValue: 1 << 25)
 
-  static let ThumbnailImage = ContactProperty(rawValue: 1 << 26)
-  static let ThumbnailImageURL = ContactProperty(rawValue: 1 << 27)
+  public static let ThumbnailImage = ContactProperty(rawValue: 1 << 26)
+  public static let ThumbnailImageURL = ContactProperty(rawValue: 1 << 27)
 
-  static let UserName = ContactProperty(rawValue: 1 << 28)
-  static let Identifier = ContactProperty(rawValue: 1 << 29)
+  public static let UserName = ContactProperty(rawValue: 1 << 28)
+  public static let Identifier = ContactProperty(rawValue: 1 << 29)
 
-  static let AllProperties:ContactProperty = [.GivenName, .FamilyName, .MiddleName, .NamePrefix, .NameSuffix, .Nickname, .PhoneticGivenName, .PhoneticFamilyName, .PhoneticMiddleName, .OrganizationName, .JobTitle, .DepartmentName, .BirthdayDate, .Emails, .Addresses, .Phone, .Note, .Kind, .DateList, .InstantMessageIdentifiers, .URLs, .SocialNetworkProfiles, .RelatedNames, .OriginalImage, .OriginalImageURL, .ThumbnailImage, .ThumbnailImageURL, .UserName, .Identifier]
+  public static let AllProperties:ContactProperty = [.GivenName, .FamilyName, .MiddleName, .NamePrefix, .NameSuffix, .Nickname, .PhoneticGivenName, .PhoneticFamilyName, .PhoneticMiddleName, .OrganizationName, .JobTitle, .DepartmentName, .BirthdayDate, .Emails, .Addresses, .Phone, .Note, .Kind, .DateList, .InstantMessageIdentifiers, .URLs, .SocialNetworkProfiles, .RelatedNames, .OriginalImage, .OriginalImageURL, .ThumbnailImage, .ThumbnailImageURL, .UserName, .Identifier]
 
-  static let BasicProperties:ContactProperty = [.GivenName, .FamilyName, .MiddleName, .BirthdayDate, .Emails, .Addresses, .Phone, .OriginalImage, .ThumbnailImage, .UserName, .Identifier]
+  public static let BasicProperties:ContactProperty = [.GivenName, .FamilyName, .MiddleName, .BirthdayDate, .Emails, .Addresses, .Phone, .OriginalImage, .ThumbnailImage, .UserName, .Identifier]
 }
 
 /**

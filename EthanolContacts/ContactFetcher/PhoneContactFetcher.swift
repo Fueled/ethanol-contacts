@@ -47,7 +47,10 @@ public class PhoneContactFetcher: NSObject, ContactFetcher {
         let predicate = CNContact.predicateForContactsInContainerWithIdentifier(defaultContainer)
         let keysToFetch = CNContactKeysFromContactProperties(properties)
         let contacts = try self.store.unifiedContactsMatchingPredicate(predicate, keysToFetch: keysToFetch)
-        success(contacts: contacts)
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+          success(contacts: contacts)
+        })
+        
       } catch {
           // handle error
           print("error occured")
