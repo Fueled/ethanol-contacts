@@ -27,7 +27,7 @@ public struct  ContactProperty : OptionSetType {
   static let Nickname = ContactProperty(rawValue: 1 << 6)
 
   static let PhoneticGivenName = ContactProperty(rawValue: 1 << 7)
-  static let PhoneticLastName = ContactProperty(rawValue: 1 << 8)
+  static let PhoneticFamilyName = ContactProperty(rawValue: 1 << 8)
   static let PhoneticMiddleName = ContactProperty(rawValue: 1 << 9)
 
   static let OrganizationName = ContactProperty(rawValue: 1 << 10)
@@ -58,7 +58,7 @@ public struct  ContactProperty : OptionSetType {
   static let UserName = ContactProperty(rawValue: 1 << 28)
   static let Identifier = ContactProperty(rawValue: 1 << 29)
 
-  static let AllProperties:ContactProperty = [.GivenName, .FamilyName, .MiddleName, .NamePrefix, .NameSuffix, .Nickname, .PhoneticGivenName, .PhoneticLastName, .PhoneticMiddleName, .OrganizationName, .JobTitle, .DepartmentName, .BirthdayDate, .Emails, .Addresses, .Phone, .Note, .Kind, .DateList, .InstantMessageIdentifiers, .URLs, .SocialNetworkProfiles, .RelatedNames, .OriginalImage, .OriginalImageURL, .ThumbnailImage, .ThumbnailImageURL, .UserName, .Identifier]
+  static let AllProperties:ContactProperty = [.GivenName, .FamilyName, .MiddleName, .NamePrefix, .NameSuffix, .Nickname, .PhoneticGivenName, .PhoneticFamilyName, .PhoneticMiddleName, .OrganizationName, .JobTitle, .DepartmentName, .BirthdayDate, .Emails, .Addresses, .Phone, .Note, .Kind, .DateList, .InstantMessageIdentifiers, .URLs, .SocialNetworkProfiles, .RelatedNames, .OriginalImage, .OriginalImageURL, .ThumbnailImage, .ThumbnailImageURL, .UserName, .Identifier]
 }
 
 /**

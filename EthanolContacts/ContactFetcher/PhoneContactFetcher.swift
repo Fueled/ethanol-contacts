@@ -55,10 +55,95 @@ public class PhoneContactFetcher: NSObject, ContactFetcher {
 }
 
 let CNContactKeysFromContactProperties = { (properties: ContactProperty) -> [CNKeyDescriptor] in
-  var keys:[CNKeyDescriptor] = []
+  var keys:[CNKeyDescriptor] = [CNContactIdentifierKey, CNContactNonGregorianBirthdayKey, CNContactPreviousFamilyNameKey, CNContactImageDataAvailableKey]
 
+  if properties.contains(ContactProperty.GivenName) {
+    keys.append(CNContactGivenNameKey)
+  }
+  if properties.contains(ContactProperty.FamilyName) {
+    keys.append(CNContactFamilyNameKey)
+  }
+  if properties.contains(ContactProperty.MiddleName) {
+    keys.append(CNContactMiddleNameKey)
+  }
+
+  if properties.contains(ContactProperty.NamePrefix) {
+    keys.append(CNContactNamePrefixKey)
+  }
+  if properties.contains(ContactProperty.NameSuffix) {
+    keys.append(CNContactNameSuffixKey)
+  }
+  if properties.contains(ContactProperty.Nickname) {
+    keys.append(CNContactPostalAddressesKey)
+  }
+
+  if properties.contains(ContactProperty.PhoneticGivenName) {
+    keys.append(CNContactPhoneticGivenNameKey)
+  }
+  if properties.contains(ContactProperty.PhoneticFamilyName) {
+    keys.append(CNContactPhoneticFamilyNameKey)
+  }
+  if properties.contains(ContactProperty.PhoneticMiddleName) {
+    keys.append(CNContactPhoneticMiddleNameKey)
+  }
+
+  if properties.contains(ContactProperty.OrganizationName) {
+    keys.append(CNContactOrganizationNameKey)
+  }
+  if properties.contains(ContactProperty.JobTitle) {
+    keys.append(CNContactJobTitleKey)
+  }
+  if properties.contains(ContactProperty.DepartmentName) {
+    keys.append(CNContactDepartmentNameKey)
+  }
+
+  if properties.contains(ContactProperty.BirthdayDate) {
+    keys.append(CNContactBirthdayKey)
+  }
+
+  if properties.contains(ContactProperty.Emails) {
+    keys.append(CNContactEmailAddressesKey)
+  }
   if properties.contains(ContactProperty.Addresses) {
     keys.append(CNContactPostalAddressesKey)
+  }
+  if properties.contains(ContactProperty.Phone) {
+    keys.append(CNContactPhoneNumbersKey)
+  }
+
+  if properties.contains(ContactProperty.Note) {
+    keys.append(CNContactNoteKey)
+  }
+  if properties.contains(ContactProperty.Kind) {
+    keys.append(CNContactTypeKey)
+  }
+  if properties.contains(ContactProperty.DateList) {
+    keys.append(CNContactDatesKey)
+  }
+
+  if properties.contains(ContactProperty.InstantMessageIdentifiers) {
+    keys.append(CNContactInstantMessageAddressesKey)
+  }
+  if properties.contains(ContactProperty.URLs) {
+    keys.append(CNContactUrlAddressesKey)
+  }
+  if properties.contains(ContactProperty.SocialNetworkProfiles) {
+    keys.append(CNContactSocialProfilesKey)
+  }
+  if properties.contains(ContactProperty.RelatedNames) {
+    keys.append(CNContactRelationsKey)
+  }
+
+  if properties.contains(ContactProperty.OriginalImage) || properties.contains(ContactProperty.OriginalImageURL) {
+    keys.append(CNContactImageDataKey)
+  }
+
+  if properties.contains(ContactProperty.ThumbnailImage) || properties.contains(ContactProperty.ThumbnailImageURL) {
+    keys.append(CNContactThumbnailImageDataKey)
+  }
+
+  if properties.contains(ContactProperty.UserName) {
+    keys.append(CNContactNicknameKey)
   }
 
   return keys
