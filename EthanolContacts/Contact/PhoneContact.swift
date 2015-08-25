@@ -11,7 +11,7 @@ import Contacts
 import AddressBook
 
 
-
+@available(iOS 8.0, *)
 @objc class PhoneContact: NSObject, Contact {
   var identifier: String
 
@@ -86,69 +86,81 @@ import AddressBook
     super.init()
   }
 
-  convenience init(person:ABRecordRef) {
+  convenience init(person:ABRecordRef, withProperties properties:ContactProperty) {
     self.init()
+
+    self.identifier = properties.contains(ContactProperty.Identifier) ? "\(ABRecordGetRecordID(person))" : ""
     
+    self.givenName = properties.contains(ContactProperty.GivenName) ? ABRecordCopyValue(person, kABPersonFirstNameProperty)?.takeRetainedValue() as? String ?? "" : ""
+    self.familyName = properties.contains(ContactProperty.FamilyName) ? ABRecordCopyValue(person, kABPersonLastNameProperty)?.takeRetainedValue() as? String ?? "" : ""
+    self.middleName = properties.contains(ContactProperty.MiddleName) ? ABRecordCopyValue(person, kABPersonMiddleNameProperty)?.takeRetainedValue() as? String ?? "" : ""
+    self.namePrefix = properties.contains(ContactProperty.NamePrefix) ? ABRecordCopyValue(person, kABPersonPrefixProperty)?.takeRetainedValue() as? String ?? "" : ""
+    self.nameSuffix = properties.contains(ContactProperty.NameSuffix) ? ABRecordCopyValue(person, kABPersonSuffixProperty)?.takeRetainedValue() as? String ?? "" : ""
+    self.nickname = properties.contains(ContactProperty.Nickname) ? ABRecordCopyValue(person, kABPersonNicknameProperty)?.takeRetainedValue() as? String ?? "" : ""
     
-    self.givenName = ABRecordCopyValue(person, kABPersonFirstNameProperty).takeRetainedValue() as? String ?? ""
-    self.familyName = ABRecordCopyValue(person, kABPersonLastNameProperty).takeRetainedValue() as? String ?? ""
-    self.middleName = ABRecordCopyValue(person, kABPersonMiddleNameProperty).takeRetainedValue() as? String ?? ""
-    self.namePrefix = ABRecordCopyValue(person, kABPersonPrefixProperty).takeRetainedValue() as? String ?? ""
-    self.nameSuffix = ABRecordCopyValue(person, kABPersonSuffixProperty).takeRetainedValue() as? String ?? ""
-    self.nickname = ABRecordCopyValue(person, kABPersonNicknameProperty).takeRetainedValue() as? String ?? ""
+    self.phoneticFamilyName = properties.contains(ContactProperty.PhoneticFamilyName) ? ABRecordCopyValue(person, kABPersonLastNamePhoneticProperty)?.takeRetainedValue() as? String ?? "" : ""
+    self.phoneticGivenName = properties.contains(ContactProperty.PhoneticGivenName) ? ABRecordCopyValue(person, kABPersonFirstNamePhoneticProperty)?.takeRetainedValue() as? String ?? "" : ""
+    self.phoneticMiddleName = properties.contains(ContactProperty.PhoneticMiddleName) ? ABRecordCopyValue(person, kABPersonFirstNameProperty)?.takeRetainedValue() as? String ?? "" : ""
     
-    self.phoneticFamilyName = ABRecordCopyValue(person, kABPersonLastNamePhoneticProperty).takeRetainedValue() as? String ?? ""
-    self.phoneticGivenName = ABRecordCopyValue(person, kABPersonFirstNamePhoneticProperty).takeRetainedValue() as? String ?? ""
-    self.phoneticMiddleName = ABRecordCopyValue(person, kABPersonFirstNameProperty).takeRetainedValue() as? String ?? ""
+    self.organizationName = properties.contains(ContactProperty.OrganizationName) ? ABRecordCopyValue(person, kABPersonOrganizationProperty)?.takeRetainedValue() as? String ?? "" : ""
+    self.jobTitle = properties.contains(ContactProperty.JobTitle) ? ABRecordCopyValue(person, kABPersonJobTitleProperty)?.takeRetainedValue() as? String ?? "" : ""
+    self.departmentName = properties.contains(ContactProperty.DepartmentName) ? ABRecordCopyValue(person, kABPersonDepartmentProperty)?.takeRetainedValue() as? String ?? "" : ""
     
-    self.organizationName = ABRecordCopyValue(person, kABPersonOrganizationProperty).takeRetainedValue() as? String ?? ""
-    self.jobTitle = ABRecordCopyValue(person, kABPersonJobTitleProperty).takeRetainedValue() as? String ?? ""
-    self.departmentName = ABRecordCopyValue(person, kABPersonDepartmentProperty).takeRetainedValue() as? String ?? ""
+    self.note = properties.contains(ContactProperty.Note) ? ABRecordCopyValue(person, kABPersonNoteProperty)?.takeRetainedValue() as? String ?? "" : ""
     
-    self.note = ABRecordCopyValue(person, kABPersonNoteProperty).takeRetainedValue() as? String ?? ""
     
     self.kind = ContactType.Unknown
-    
-
-    let GetArrayFromAdressBookMultipleValueProperty = {(property: ABPropertyID) -> [String] in
-      
-      let values = ABRecordCopyValue(person, property).takeRetainedValue()
-      let count = ABMultiValueGetCount(values)
-      var array:[String] = []
-      for counter in 0...count{
-        let copiedVal = ABMultiValueCopyValueAtIndex(values, counter).takeRetainedValue() as? String ?? ""
-        array.append(copiedVal)
+    if properties.contains(ContactProperty.Kind) {
+      let kindVal = ABRecordCopyValue(person, kABPersonKindProperty)?.takeRetainedValue() as? NSNumber
+      if kindVal?.integerValue == (kABPersonKindPerson as! NSNumber).integerValue {
+        self.kind = ContactType.Person
+      } else if kindVal?.integerValue == (kABPersonKindOrganization as! NSNumber).integerValue {
+        self.kind = ContactType.Organization
       }
-      
-      return array
     }
     
-    self.addresses = GetArrayFromAdressBookMultipleValueProperty(kABPersonAddressProperty)
-    self.emails = GetArrayFromAdressBookMultipleValueProperty(kABPersonEmailProperty)
-    self.birthdayDate = ABRecordCopyValue(person, kABPersonBirthdayProperty).takeRetainedValue() as? NSDate
+    
+    let GetArrayFromAdressBookMultipleValueProperty = {(property: ABPropertyID, contactProperty:ContactProperty) -> [String] in
+      if properties.contains(contactProperty) {
+        let values = ABRecordCopyValue(person, property)?.takeRetainedValue()
+        let count = ABMultiValueGetCount(values)
+        var array:[String] = []
+        for counter in 0..<count{
+          let copiedVal = ABMultiValueCopyValueAtIndex(values, counter)?.takeRetainedValue() as? String ?? ""
+          array.append(copiedVal)
+        }
+        return array
+      }
+      return []
+    }
+    
+    self.addresses = GetArrayFromAdressBookMultipleValueProperty(kABPersonAddressProperty, ContactProperty.Addresses)
+    self.emails = GetArrayFromAdressBookMultipleValueProperty(kABPersonEmailProperty, ContactProperty.Emails)
+    self.birthdayDate = properties.contains(ContactProperty.BirthdayDate) ?  ABRecordCopyValue(person, kABPersonBirthdayProperty)?.takeRetainedValue() as? NSDate : nil
     
     let dateFormatter = NSDateFormatter()
-    self.dateList = GetArrayFromAdressBookMultipleValueProperty(kABPersonDateProperty).map(){
-      print($0)
+    self.dateList = GetArrayFromAdressBookMultipleValueProperty(kABPersonDateProperty, ContactProperty.DateList).map(){
       return  dateFormatter.dateFromString($0) ?? NSDate()
     }
     
-    self.phone = GetArrayFromAdressBookMultipleValueProperty(kABPersonPhoneProperty)
-    self.instantMessageIdentifiers = GetArrayFromAdressBookMultipleValueProperty(kABPersonInstantMessageProperty)
-    self.urls = GetArrayFromAdressBookMultipleValueProperty(kABPersonURLProperty)
-    self.socialNetworkProfiles = GetArrayFromAdressBookMultipleValueProperty(kABPersonSocialProfileProperty)
-    self.relatedNames = GetArrayFromAdressBookMultipleValueProperty(kABPersonRelatedNamesProperty)
+    self.phone = GetArrayFromAdressBookMultipleValueProperty(kABPersonPhoneProperty, ContactProperty.Phone)
+    self.instantMessageIdentifiers = GetArrayFromAdressBookMultipleValueProperty(kABPersonInstantMessageProperty, ContactProperty.InstantMessageIdentifiers)
+    self.urls = GetArrayFromAdressBookMultipleValueProperty(kABPersonURLProperty, ContactProperty.URLs)
+    self.socialNetworkProfiles = GetArrayFromAdressBookMultipleValueProperty(kABPersonSocialProfileProperty, ContactProperty.SocialNetworkProfiles)
+    self.relatedNames = GetArrayFromAdressBookMultipleValueProperty(kABPersonRelatedNamesProperty, ContactProperty.RelatedNames)
     
     if ABPersonHasImageData(person) {
-      if let data = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatOriginalSize).takeRetainedValue() as? NSData {
+      if let data = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatOriginalSize)?.takeRetainedValue() as? NSData where properties.contains(ContactProperty.OriginalImage.union(ContactProperty.OriginalImageURL)) {
         self.originalImage = UIImage(data: data)
       }
-      if let data = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail).takeRetainedValue() as? NSData {
+      if let data = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail)?.takeRetainedValue() as? NSData where properties.contains(ContactProperty.ThumbnailImage.union(ContactProperty.ThumbnailImageURL)){
         self.thumbnailImage = UIImage(data: data)
       }
-
+      
     }
-    
+  }
+  convenience init(person:ABRecordRef) {
+    self.init(person: person, withProperties: ContactProperty.AllProperties)
   }
 }
 
