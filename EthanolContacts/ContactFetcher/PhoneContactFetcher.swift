@@ -10,7 +10,7 @@ import UIKit
 import Contacts
 import AddressBook
 
-public class PhoneContactFetcher : NSObject, ContactFetcher {
+public final class PhoneContactFetcher : NSObject, ContactFetcher {
   public static var contactFetcher: ContactFetcher {
     if #available(iOS 9.0, *) {
       return ContactFrameworkFetcher.contactFetcher
@@ -34,7 +34,7 @@ public class PhoneContactFetcher : NSObject, ContactFetcher {
 }
 
 @available(iOS 8.0, *)
-class AddressBookFetcher:NSObject, ContactFetcher {
+final class AddressBookFetcher:NSObject, ContactFetcher {
 
   static let internalAddressBookFetcher = AddressBookFetcher()
   static var contactFetcher: ContactFetcher {
@@ -44,26 +44,27 @@ class AddressBookFetcher:NSObject, ContactFetcher {
   var addressBook:ABAddressBookRef?
 
   var isAuthorized:Bool {
-    return ABAddressBookGetAuthorizationStatus() == ABAuthorizationStatus.Authorized && (self.addressBook != nil)
+    return ABAddressBookGetAuthorizationStatus() == .Authorized && (addressBook != nil)
   }
   
   func fetchContactsForProperties(properties: ContactProperty, success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
     if isAuthorized {
       do {
         let contacts = try self.contactsFromAddressBookWithGivenProperties(properties)
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        
+        dispatch_async(dispatch_get_main_queue(), {
           success(contacts: contacts)
         })
       } catch {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        dispatch_async(dispatch_get_main_queue(), {
           failure(error: self.errorWithInfo("something happened", "contacts werent fetched"))
         })
       }
     } else {
       authorizeWithCompletion(success: { () -> () in
         self.fetchContactsForProperties(properties, success: success, failure: failure)
-        }, failure: { (error) -> Void in
-          dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        }, failure: { (error) in
+          dispatch_async(dispatch_get_main_queue(), {
             failure(error: error)
           })
       })
@@ -72,22 +73,22 @@ class AddressBookFetcher:NSObject, ContactFetcher {
 
   func authorizeWithCompletion(success successBlock: ETHContactFetcherAuthorizeSuccessBlock, failure: ETHContactFetcherFailureBlock) {
     
-    guard let thisAddressBook = ABAddressBookCreate().takeRetainedValue() as? ABAddressBook else {
-      dispatch_async(dispatch_get_main_queue(), { () -> Void in
+    guard let thisAddressBook = ABAddressBookCreate().takeRetainedValue() as ABAddressBook? else {
+      dispatch_async(dispatch_get_main_queue(), {
         failure(error: self.errorWithInfo("EthanolContactAuthorizationFailed", "EthanolContactAddressBookFailedToCreate"))
       })
       return
     }
 
-    self.addressBook = thisAddressBook
+    addressBook = thisAddressBook
 
     if(isAuthorized) {
-      dispatch_async(dispatch_get_main_queue(), { () -> Void in
+      dispatch_async(dispatch_get_main_queue(), {
         successBlock()
       })
     } else {
-      let completionHandler:ABAddressBookRequestAccessCompletionHandler = { (granted:Bool, error:CFError!) -> Void in
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+      let completionHandler:ABAddressBookRequestAccessCompletionHandler = { (granted:Bool, error:CFError!) in
+        dispatch_async(dispatch_get_main_queue(), {
           if let error = error {
             failure(error: (error as NSError))
           } else if(!granted) {
@@ -108,27 +109,25 @@ class AddressBookFetcher:NSObject, ContactFetcher {
 
   func contactsFromAddressBookWithGivenProperties(propertiesFlag:ContactProperty) throws -> [Contact] {
     
-    guard let thisAddressBook = self.addressBook else {
+    guard let addressBook = addressBook else {
       throw self.errorWithInfo("EthanolContactFetchFailed", "SomethingWentWrong")
     }
 
-    var contacts:[Contact] = []
-    if let people = ABAddressBookCopyArrayOfAllPeople(thisAddressBook).takeRetainedValue() as? NSArray {
-      for aPerson in people {
-        if let thisPerson = aPerson as? ABRecordRef {
-          let aContact = PhoneContact(person: thisPerson, withProperties:propertiesFlag)
-          contacts.append(aContact)
+    var contacts = [Contact]()
+    if let people = ABAddressBookCopyArrayOfAllPeople(addressBook).takeRetainedValue() as NSArray? {
+      for person in people {
+        if let person = person as ABRecordRef? {
+          let contact = PhoneContact(person: person, withProperties:propertiesFlag)
+          contacts.append(contact)
         }
       }
     }
-
     return contacts
   }
-  
 }
 
 @available(iOS 9.0, *)
-class ContactFrameworkFetcher: NSObject, ContactFetcher {
+final class ContactFrameworkFetcher: NSObject, ContactFetcher {
   
   static let internalContactFetcher = PhoneContactFetcher()
 
@@ -146,14 +145,14 @@ class ContactFrameworkFetcher: NSObject, ContactFetcher {
         let predicate = CNContact.predicateForContactsInContainerWithIdentifier(defaultContainer)
         let keysToFetch = CNContactKeysFromContactProperties(properties)
         let contacts = try self.store.unifiedContactsMatchingPredicate(predicate, keysToFetch: keysToFetch)
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        dispatch_async(dispatch_get_main_queue(), {
           success(contacts: contacts)
         })
         
       } catch {
           // handle error
           print("error occured")
-          dispatch_async(dispatch_get_main_queue(), { () -> Void in
+          dispatch_async(dispatch_get_main_queue(), {
             failure(error: nil)
           })
       }
@@ -164,17 +163,16 @@ class ContactFrameworkFetcher: NSObject, ContactFetcher {
         }, failure: failure)
     }
   }
-
   
   func authorizeWithCompletion(success successBlock: ETHContactFetcherAuthorizeSuccessBlock, failure: ETHContactFetcherFailureBlock) {
-    CNContactStore().requestAccessForEntityType(CNEntityType.Contacts) { (success: Bool, error: NSError?) -> Void in
+    CNContactStore().requestAccessForEntityType(CNEntityType.Contacts) { (success: Bool, error: NSError?) in
      self.isAuthorized = success
       if success {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        dispatch_async(dispatch_get_main_queue(), {
           successBlock()
         })
       } else {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        dispatch_async(dispatch_get_main_queue(), {
           failure(error: error)
         })
       }

@@ -67,7 +67,7 @@ public protocol ContactFetcher {
   func authorizeWithCompletion(success success: ETHContactFetcherAuthorizeSuccessBlock, failure: ETHContactFetcherFailureBlock);
 }
 
-/**  */
+/** Default implementation of fetchContactsWithCompletion to return contacts with all properties */
 extension ContactFetcher {
  public func fetchContactsWithCompletion(success success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
     self.fetchContactsForProperties(ContactProperty.AllProperties, success: success, failure: failure)
