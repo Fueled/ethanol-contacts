@@ -111,9 +111,9 @@ import AddressBook
     kind = .Unknown
     if properties.contains(ContactProperty.Kind) {
       let kindVal = ABRecordCopyValue(person, kABPersonKindProperty)?.takeRetainedValue() as? NSNumber
-      if kindVal?.integerValue == (kABPersonKindPerson as! NSNumber).integerValue {
+      if kindVal?.integerValue == (kABPersonKindPerson as NSNumber).integerValue {
         kind = .Person
-      } else if kindVal?.integerValue == (kABPersonKindOrganization as! NSNumber).integerValue {
+      } else if kindVal?.integerValue == (kABPersonKindOrganization as NSNumber).integerValue {
         kind = .Organization
       }
     }
