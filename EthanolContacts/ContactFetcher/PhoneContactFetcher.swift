@@ -129,7 +129,7 @@ final class AddressBookFetcher:NSObject, ContactFetcher {
 @available(iOS 9.0, *)
 final class ContactFrameworkFetcher: NSObject, ContactFetcher {
   
-  static let internalContactFetcher = PhoneContactFetcher()
+  static let internalContactFetcher = ContactFrameworkFetcher()
 
   static var contactFetcher: ContactFetcher {
     return internalContactFetcher
