@@ -166,7 +166,25 @@ import AddressBook
 @available(iOS 9.0, *)
 extension Array where Element : CNLabeledValue {
   var stringArray: [String] {
-    return self.map() { ($0.value as! String) }
+    return self.map() {
+    
+      if let phone = $0.value as? CNPhoneNumber {
+        return phone.stringValue
+        
+      } else if let postalAddress = $0.value as? CNPostalAddress {
+        return postalAddress.stringValue()
+        
+      } else {
+        return ($0.value as! String)
+      }
+    }
+  }
+}
+
+@available(iOS 9.0, *)
+extension CNPostalAddress {
+  public func stringValue() -> String {
+    return self.street + self.city + self.state + self.postalCode + country + self.ISOCountryCode
   }
 }
 
