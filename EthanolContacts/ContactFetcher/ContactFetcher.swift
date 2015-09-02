@@ -33,18 +33,9 @@ public protocol ContactFetcher {
 
   var isAuthorized:Bool { get }
 
-  /**
-  *  Allow to fetch contacts. This method is designed to be implemented in subclasses.
-  *  The fetched contacts will have all of their properties set.
-  *
-  *  @param success Block called when the contacts have been successfuly fetched.
-  *  @param failure Block called when the contacts haven't been successfuly fetched.
-  */
-
-  func fetchContactsWithCompletion(success success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock);
 
   /**
-  *  Allow to fetch contacts. This method is designed to be implemented in subclasses.
+  *  Allow to fetch contacts.
   *  The fetched contacts will only have the properties set
   *
   *  @discussion This method will call authorizeWithSuccess internally if the user is not yet authorized.
@@ -69,6 +60,15 @@ public protocol ContactFetcher {
 
 /** Default implementation of fetchContactsWithCompletion to return contacts with all properties */
 extension ContactFetcher {
+
+	/**
+	*  Allow to fetch contacts.
+	*  The fetched contacts will have all of their properties set.
+	*
+	*  @param success Block called when the contacts have been successfuly fetched.
+	*  @param failure Block called when the contacts haven't been successfuly fetched.
+	*/
+
  public func fetchContactsWithCompletion(success success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
     self.fetchContactsForProperties(ContactProperty.AllProperties, success: success, failure: failure)
   }

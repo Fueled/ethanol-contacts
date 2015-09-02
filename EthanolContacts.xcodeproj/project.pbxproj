@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3279B7411B97181E00A5F12D /* AddressBookFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3279B7401B97181E00A5F12D /* AddressBookFetcher.swift */; };
+		3279B7431B97185A00A5F12D /* ContactFrameworkFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3279B7421B97185A00A5F12D /* ContactFrameworkFetcher.swift */; };
 		32C2BFFF1B8B5212004EBA06 /* PhoneContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C2BFFE1B8B5212004EBA06 /* PhoneContact.swift */; };
 		650FE2BA1B85F5220019DBDA /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650FE2B91B85F5220019DBDA /* Contact.swift */; };
 		650FE2BC1B85F5410019DBDA /* ContactFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650FE2BB1B85F5410019DBDA /* ContactFetcher.swift */; };
@@ -28,6 +30,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3279B7401B97181E00A5F12D /* AddressBookFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressBookFetcher.swift; sourceTree = "<group>"; };
+		3279B7421B97185A00A5F12D /* ContactFrameworkFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactFrameworkFetcher.swift; sourceTree = "<group>"; };
 		32C2BFFE1B8B5212004EBA06 /* PhoneContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneContact.swift; sourceTree = "<group>"; };
 		650FE2B91B85F5220019DBDA /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		650FE2BB1B85F5410019DBDA /* ContactFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactFetcher.swift; sourceTree = "<group>"; };
@@ -66,6 +70,8 @@
 			children = (
 				650FE2BB1B85F5410019DBDA /* ContactFetcher.swift */,
 				650FE2BF1B8603410019DBDA /* PhoneContactFetcher.swift */,
+				3279B7421B97185A00A5F12D /* ContactFrameworkFetcher.swift */,
+				3279B7401B97181E00A5F12D /* AddressBookFetcher.swift */,
 			);
 			path = ContactFetcher;
 			sourceTree = "<group>";
@@ -236,8 +242,10 @@
 			files = (
 				650FE2C01B8603410019DBDA /* PhoneContactFetcher.swift in Sources */,
 				650FE2BC1B85F5410019DBDA /* ContactFetcher.swift in Sources */,
+				3279B7411B97181E00A5F12D /* AddressBookFetcher.swift in Sources */,
 				650FE2BA1B85F5220019DBDA /* Contact.swift in Sources */,
 				32C2BFFF1B8B5212004EBA06 /* PhoneContact.swift in Sources */,
+				3279B7431B97185A00A5F12D /* ContactFrameworkFetcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
