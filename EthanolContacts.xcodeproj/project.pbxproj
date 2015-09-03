@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3279B7411B97181E00A5F12D /* AddressBookFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3279B7401B97181E00A5F12D /* AddressBookFetcher.swift */; };
+		3279B7431B97185A00A5F12D /* ContactFrameworkFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3279B7421B97185A00A5F12D /* ContactFrameworkFetcher.swift */; };
+		32C2BFFF1B8B5212004EBA06 /* PhoneContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C2BFFE1B8B5212004EBA06 /* PhoneContact.swift */; };
+		650FE2BA1B85F5220019DBDA /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650FE2B91B85F5220019DBDA /* Contact.swift */; };
+		650FE2BC1B85F5410019DBDA /* ContactFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650FE2BB1B85F5410019DBDA /* ContactFetcher.swift */; };
+		650FE2C01B8603410019DBDA /* PhoneContactFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650FE2BF1B8603410019DBDA /* PhoneContactFetcher.swift */; };
 		654B36331B85E6C100FAA212 /* EthanolContacts.h in Headers */ = {isa = PBXBuildFile; fileRef = 654B36321B85E6C100FAA212 /* EthanolContacts.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		654B363A1B85E6C100FAA212 /* EthanolContacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 654B362F1B85E6C100FAA212 /* EthanolContacts.framework */; };
 		654B363F1B85E6C100FAA212 /* EthanolContactsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654B363E1B85E6C100FAA212 /* EthanolContactsTests.swift */; };
@@ -24,6 +30,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3279B7401B97181E00A5F12D /* AddressBookFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressBookFetcher.swift; sourceTree = "<group>"; };
+		3279B7421B97185A00A5F12D /* ContactFrameworkFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactFrameworkFetcher.swift; sourceTree = "<group>"; };
+		32C2BFFE1B8B5212004EBA06 /* PhoneContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneContact.swift; sourceTree = "<group>"; };
+		650FE2B91B85F5220019DBDA /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		650FE2BB1B85F5410019DBDA /* ContactFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactFetcher.swift; sourceTree = "<group>"; };
+		650FE2BF1B8603410019DBDA /* PhoneContactFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneContactFetcher.swift; sourceTree = "<group>"; };
 		654B362F1B85E6C100FAA212 /* EthanolContacts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EthanolContacts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		654B36321B85E6C100FAA212 /* EthanolContacts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EthanolContacts.h; sourceTree = "<group>"; };
 		654B36341B85E6C100FAA212 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -53,6 +65,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		650FE2B61B85F5070019DBDA /* ContactFetcher */ = {
+			isa = PBXGroup;
+			children = (
+				650FE2BB1B85F5410019DBDA /* ContactFetcher.swift */,
+				650FE2BF1B8603410019DBDA /* PhoneContactFetcher.swift */,
+				3279B7421B97185A00A5F12D /* ContactFrameworkFetcher.swift */,
+				3279B7401B97181E00A5F12D /* AddressBookFetcher.swift */,
+			);
+			path = ContactFetcher;
+			sourceTree = "<group>";
+		};
+		650FE2B81B85F5070019DBDA /* Contact */ = {
+			isa = PBXGroup;
+			children = (
+				650FE2B91B85F5220019DBDA /* Contact.swift */,
+				32C2BFFE1B8B5212004EBA06 /* PhoneContact.swift */,
+			);
+			path = Contact;
+			sourceTree = "<group>";
+		};
 		654B36251B85E6C100FAA212 = {
 			isa = PBXGroup;
 			children = (
@@ -75,6 +107,8 @@
 		654B36311B85E6C100FAA212 /* EthanolContacts */ = {
 			isa = PBXGroup;
 			children = (
+				650FE2B61B85F5070019DBDA /* ContactFetcher */,
+				650FE2B81B85F5070019DBDA /* Contact */,
 				654B36321B85E6C100FAA212 /* EthanolContacts.h */,
 				654B36341B85E6C100FAA212 /* Info.plist */,
 			);
@@ -154,6 +188,7 @@
 		654B36261B85E6C100FAA212 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Fueled;
 				TargetAttributes = {
@@ -205,6 +240,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				650FE2C01B8603410019DBDA /* PhoneContactFetcher.swift in Sources */,
+				650FE2BC1B85F5410019DBDA /* ContactFetcher.swift in Sources */,
+				3279B7411B97181E00A5F12D /* AddressBookFetcher.swift in Sources */,
+				650FE2BA1B85F5220019DBDA /* Contact.swift in Sources */,
+				32C2BFFF1B8B5212004EBA06 /* PhoneContact.swift in Sources */,
+				3279B7431B97185A00A5F12D /* ContactFrameworkFetcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,36 +360,33 @@
 		654B36441B85E6C100FAA212 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Checkouts/ethanol-utilities/build/Debug-iphoneos",
-				);
 				INFOPLIST_FILE = EthanolContacts/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Fueled.EthanolContacts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		654B36451B85E6C100FAA212 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Checkouts/ethanol-utilities/build/Debug-iphoneos",
-				);
 				INFOPLIST_FILE = EthanolContacts/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Fueled.EthanolContacts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
