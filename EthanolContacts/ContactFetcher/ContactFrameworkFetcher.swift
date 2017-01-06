@@ -39,133 +39,133 @@ final class ContactFrameworkFetcher: NSObject, ContactFetcher {
 	let store = CNContactStore()
 
 	var isAuthorized:Bool = false
-	func fetchContactsForProperties(properties: ContactProperty, success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
+	func fetchContacts(for properties: ContactProperty, success: @escaping ETHContactFetcherSuccessBlock, failure: @escaping ETHContactFetcherFailureBlock) {
 		if isAuthorized {
 			do {
 				let defaultContainer = store.defaultContainerIdentifier()
-				let predicate = CNContact.predicateForContactsInContainerWithIdentifier(defaultContainer)
+				let predicate = CNContact.predicateForContactsInContainer(withIdentifier: defaultContainer)
 				let keysToFetch = CNContactKeysFromContactProperties(properties)
-				let contacts = try self.store.unifiedContactsMatchingPredicate(predicate, keysToFetch: keysToFetch)
-				dispatch_async(dispatch_get_main_queue(), {
-					success(contacts: contacts)
+				let contacts = try self.store.unifiedContacts(matching: predicate, keysToFetch: keysToFetch)
+				DispatchQueue.main.async(execute: {
+					success(contacts)
 				})
 
 			} catch {
 				// handle error
 				print("error occured")
-				dispatch_async(dispatch_get_main_queue(), {
-					failure(error: nil)
+				DispatchQueue.main.async(execute: {
+					failure(nil)
 				})
 			}
 
 		} else {
-			self.authorizeWithCompletion(success: {
-				self.fetchContactsForProperties(properties, success: success, failure: failure)
-				}, failure: failure)
+			self.authorize(success: {
+				self.fetchContacts(for: properties, success: success, failure: failure)
+			}, failure: failure)
 		}
 	}
 
-	func authorizeWithCompletion(success successBlock: ETHContactFetcherAuthorizeSuccessBlock, failure: ETHContactFetcherFailureBlock) {
-		CNContactStore().requestAccessForEntityType(CNEntityType.Contacts) { (success: Bool, error: NSError?) in
+	func authorize(success successBlock: @escaping ETHContactFetcherAuthorizeSuccessBlock, failure: @escaping ETHContactFetcherFailureBlock) {
+		CNContactStore().requestAccess(for: CNEntityType.contacts) { (success: Bool, error: Error?) in
 			self.isAuthorized = success
 			if success {
-				dispatch_async(dispatch_get_main_queue(), {
+				DispatchQueue.main.async(execute: {
 					successBlock()
 				})
 			} else {
-				dispatch_async(dispatch_get_main_queue(), {
-					failure(error: error)
+				DispatchQueue.main.async(execute: {
+					failure(error)
 				})
 			}
 		}
 	}
 
 	let CNContactKeysFromContactProperties = { (properties: ContactProperty) -> [CNKeyDescriptor] in
-		var keys:[CNKeyDescriptor] = [CNContactIdentifierKey, CNContactNonGregorianBirthdayKey, CNContactPreviousFamilyNameKey, CNContactImageDataAvailableKey]
+		var keys:[CNKeyDescriptor] = [CNContactIdentifierKey as CNKeyDescriptor, CNContactNonGregorianBirthdayKey as CNKeyDescriptor, CNContactPreviousFamilyNameKey as CNKeyDescriptor, CNContactImageDataAvailableKey as CNKeyDescriptor]
 
 		if properties.contains(ContactProperty.GivenName) {
-			keys.append(CNContactGivenNameKey)
+			keys.append(CNContactGivenNameKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.FamilyName) {
-			keys.append(CNContactFamilyNameKey)
+			keys.append(CNContactFamilyNameKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.MiddleName) {
-			keys.append(CNContactMiddleNameKey)
+			keys.append(CNContactMiddleNameKey as CNKeyDescriptor)
 		}
 
 		if properties.contains(ContactProperty.NamePrefix) {
-			keys.append(CNContactNamePrefixKey)
+			keys.append(CNContactNamePrefixKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.NameSuffix) {
-			keys.append(CNContactNameSuffixKey)
+			keys.append(CNContactNameSuffixKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.Nickname) {
-			keys.append(CNContactNicknameKey)
+			keys.append(CNContactNicknameKey as CNKeyDescriptor)
 		}
 
 		if properties.contains(ContactProperty.PhoneticGivenName) {
-			keys.append(CNContactPhoneticGivenNameKey)
+			keys.append(CNContactPhoneticGivenNameKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.PhoneticFamilyName) {
-			keys.append(CNContactPhoneticFamilyNameKey)
+			keys.append(CNContactPhoneticFamilyNameKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.PhoneticMiddleName) {
-			keys.append(CNContactPhoneticMiddleNameKey)
+			keys.append(CNContactPhoneticMiddleNameKey as CNKeyDescriptor)
 		}
 
 		if properties.contains(ContactProperty.OrganizationName) {
-			keys.append(CNContactOrganizationNameKey)
+			keys.append(CNContactOrganizationNameKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.JobTitle) {
-			keys.append(CNContactJobTitleKey)
+			keys.append(CNContactJobTitleKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.DepartmentName) {
-			keys.append(CNContactDepartmentNameKey)
+			keys.append(CNContactDepartmentNameKey as CNKeyDescriptor)
 		}
 
 		if properties.contains(ContactProperty.BirthdayDate) {
-			keys.append(CNContactBirthdayKey)
+			keys.append(CNContactBirthdayKey as CNKeyDescriptor)
 		}
 
 		if properties.contains(ContactProperty.Emails) {
-			keys.append(CNContactEmailAddressesKey)
+			keys.append(CNContactEmailAddressesKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.Addresses) {
-			keys.append(CNContactPostalAddressesKey)
+			keys.append(CNContactPostalAddressesKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.Phone) {
-			keys.append(CNContactPhoneNumbersKey)
+			keys.append(CNContactPhoneNumbersKey as CNKeyDescriptor)
 		}
 
 		if properties.contains(ContactProperty.Note) {
-			keys.append(CNContactNoteKey)
+			keys.append(CNContactNoteKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.Kind) {
-			keys.append(CNContactTypeKey)
+			keys.append(CNContactTypeKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.DateList) {
-			keys.append(CNContactDatesKey)
+			keys.append(CNContactDatesKey as CNKeyDescriptor)
 		}
 
 		if properties.contains(ContactProperty.InstantMessageIdentifiers) {
-			keys.append(CNContactInstantMessageAddressesKey)
+			keys.append(CNContactInstantMessageAddressesKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.URLs) {
-			keys.append(CNContactUrlAddressesKey)
+			keys.append(CNContactUrlAddressesKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.SocialNetworkProfiles) {
-			keys.append(CNContactSocialProfilesKey)
+			keys.append(CNContactSocialProfilesKey as CNKeyDescriptor)
 		}
 		if properties.contains(ContactProperty.RelatedNames) {
-			keys.append(CNContactRelationsKey)
+			keys.append(CNContactRelationsKey as CNKeyDescriptor)
 		}
 
 		if properties.contains(ContactProperty.OriginalImage) || properties.contains(ContactProperty.OriginalImageURL) {
-			keys.append(CNContactImageDataKey)
+			keys.append(CNContactImageDataKey as CNKeyDescriptor)
 		}
 
 		if properties.contains(ContactProperty.ThumbnailImage) || properties.contains(ContactProperty.ThumbnailImageURL) {
-			keys.append(CNContactThumbnailImageDataKey)
+			keys.append(CNContactThumbnailImageDataKey as CNKeyDescriptor)
 		}
 
 		return keys

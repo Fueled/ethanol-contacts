@@ -39,11 +39,11 @@ public final class PhoneContactFetcher : NSObject, ContactFetcher {
     return PhoneContactFetcher.contactFetcher.isAuthorized
   }
   
-  public func fetchContactsForProperties(properties: ContactProperty, success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
-      PhoneContactFetcher.contactFetcher.fetchContactsForProperties(properties, success: success, failure: failure)
+	public func fetchContacts(for properties: ContactProperty, success: @escaping (Array<Contact>) -> Void, failure: @escaping (Error?) -> Void) {
+		PhoneContactFetcher.contactFetcher.fetchContacts(for: properties, success: success, failure: failure)
   }
 
-  public func authorizeWithCompletion(success success: ETHContactFetcherAuthorizeSuccessBlock, failure: ETHContactFetcherFailureBlock) {
-    PhoneContactFetcher.contactFetcher.authorizeWithCompletion(success: success, failure: failure)
+	public func authorize(success: @escaping () -> (), failure: @escaping (Error?) -> Void) {
+    PhoneContactFetcher.contactFetcher.authorize(success: success, failure: failure)
   }
 }

@@ -54,13 +54,13 @@ import AddressBook
   var note: String
 
   var emails: Array<String>?
-  var birthdayDate: NSDate?
+  var birthdayDate: Date?
 
   var addresses: Array<String>?
 
   var kind: ContactType
 
-  var dateList: Array<NSDate>?
+  var dateList: Array<Date>?
 
   var phone: Array<String>?
 
@@ -72,10 +72,10 @@ import AddressBook
   var relatedNames: Array<String>?
 
   var originalImage: UIImage?
-  var originalImageURL: NSURL?
+  var originalImageURL: URL?
 
   var thumbnailImage: UIImage?
-  var thumbnailImageURL: NSURL?
+  var thumbnailImageURL: URL?
 
   override init() {
     identifier = ""
@@ -99,12 +99,12 @@ import AddressBook
     
     note = ""
 
-    kind = .Unknown
+    kind = .unknown
 
     super.init()
   }
 
-  convenience init(person:ABRecordRef, withProperties properties:ContactProperty) {
+  convenience init(person:ABRecord, withProperties properties:ContactProperty) {
     self.init()
 
     identifier = properties.contains(ContactProperty.Identifier) ? "\(ABRecordGetRecordID(person))" : ""
@@ -126,13 +126,13 @@ import AddressBook
     
     note = properties.contains(ContactProperty.Note) ? ABRecordCopyValue(person, kABPersonNoteProperty)?.takeRetainedValue() as? String ?? "" : ""
     
-    kind = .Unknown
+    kind = .unknown
     if properties.contains(ContactProperty.Kind) {
       let kindVal = ABRecordCopyValue(person, kABPersonKindProperty)?.takeRetainedValue() as? NSNumber
-      if kindVal?.integerValue == (kABPersonKindPerson as NSNumber).integerValue {
-        kind = .Person
-      } else if kindVal?.integerValue == (kABPersonKindOrganization as NSNumber).integerValue {
-        kind = .Organization
+      if kindVal?.intValue == (kABPersonKindPerson as NSNumber).intValue {
+        kind = .person
+      } else if kindVal?.intValue == (kABPersonKindOrganization as NSNumber).intValue {
+        kind = .organization
       }
     }
     
@@ -153,11 +153,11 @@ import AddressBook
     
     addresses = GetArrayFromAdressBookMultipleValueProperty(kABPersonAddressProperty, ContactProperty.Addresses)
     emails = GetArrayFromAdressBookMultipleValueProperty(kABPersonEmailProperty, ContactProperty.Emails)
-    birthdayDate = properties.contains(ContactProperty.BirthdayDate) ?  ABRecordCopyValue(person, kABPersonBirthdayProperty)?.takeRetainedValue() as? NSDate : nil
+    birthdayDate = properties.contains(ContactProperty.BirthdayDate) ?  ABRecordCopyValue(person, kABPersonBirthdayProperty)?.takeRetainedValue() as? Date : nil
     
-    let dateFormatter = NSDateFormatter()
+    let dateFormatter = DateFormatter()
     dateList = GetArrayFromAdressBookMultipleValueProperty(kABPersonDateProperty, ContactProperty.DateList).map(){
-      return  dateFormatter.dateFromString($0) ?? NSDate()
+      return  dateFormatter.date(from: $0) ?? Date()
     }
     
     phone = GetArrayFromAdressBookMultipleValueProperty(kABPersonPhoneProperty, ContactProperty.Phone)
@@ -167,42 +167,42 @@ import AddressBook
     relatedNames = GetArrayFromAdressBookMultipleValueProperty(kABPersonRelatedNamesProperty, ContactProperty.RelatedNames)
     
     if ABPersonHasImageData(person) {
-      if let data = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatOriginalSize)?.takeRetainedValue() as? NSData where properties.contains(ContactProperty.OriginalImage.union(ContactProperty.OriginalImageURL)) {
+      if let data = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatOriginalSize)?.takeRetainedValue() as? Data , properties.contains(ContactProperty.OriginalImage.union(ContactProperty.OriginalImageURL)) {
           originalImage = UIImage(data: data)
       }
-      if let data = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail)?.takeRetainedValue() as? NSData where properties.contains(ContactProperty.ThumbnailImage.union(ContactProperty.ThumbnailImageURL)){
+      if let data = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail)?.takeRetainedValue() as? Data , properties.contains(ContactProperty.ThumbnailImage.union(ContactProperty.ThumbnailImageURL)){
           thumbnailImage = UIImage(data: data)
       }
       
     }
   }
-  convenience init(person:ABRecordRef) {
+  convenience init(person:ABRecord) {
     self.init(person: person, withProperties: ContactProperty.AllProperties)
   }
 }
 
 @available(iOS 9.0, *)
-extension Array where Element : CNLabeledValue {
-  var stringArray: [String] {
-    return self.map() {
-    
-      if let phone = $0.value as? CNPhoneNumber {
-        return phone.stringValue
-        
-      } else if let postalAddress = $0.value as? CNPostalAddress {
-        return postalAddress.stringValue()
-        
-      } else {
-        return ($0.value as! String)
-      }
-    }
-  }
+extension Array {
+	var stringArray: [String] {
+		var stringArray: [String] = []
+
+		self.forEach {
+			if let phone = $0 as? CNLabeledValue<CNPhoneNumber> {
+				stringArray.append(phone.value.stringValue)
+			} else if let postalAddress = $0 as? CNLabeledValue<CNPostalAddress> {
+				stringArray.append(postalAddress.value.stringValue())
+			} else if let complementaryStringValue = $0 as? CNLabeledValue<NSString> {
+				stringArray.append(String(complementaryStringValue.value))
+			}
+		}
+		return stringArray
+	}
 }
 
 @available(iOS 9.0, *)
 extension CNPostalAddress {
   public func stringValue() -> String {
-    return self.street + self.city + self.state + self.postalCode + country + self.ISOCountryCode
+    return self.street + self.city + self.state + self.postalCode + country + self.isoCountryCode
   }
 }
 
@@ -215,10 +215,10 @@ extension CNContact: Contact {
 
   public var kind: ContactType {
     switch contactType {
-    case CNContactType.Person:
-      return .Person
-    case CNContactType.Organization:
-      return .Organization
+    case CNContactType.person:
+      return .person
+    case CNContactType.organization:
+      return .organization
     }
   }
 
@@ -250,12 +250,12 @@ extension CNContact: Contact {
     return instantMessageAddresses.stringArray
   }
 
-  public var birthdayDate: NSDate? {
-    return birthday?.date
+  public var birthdayDate: Date? {
+    return (birthday as NSDateComponents?)?.date
   }
 
-  public var dateList: Array<NSDate>? {
-    return dates.map() { ($0.value as! NSDate) }
+  public var dateList: Array<Date>? {
+    return dates.map() { $0.value.date! }
   }
 
   public var originalImage: UIImage? {
@@ -274,11 +274,11 @@ extension CNContact: Contact {
     }
   }
 
-  public var originalImageURL: NSURL? {
+  public var originalImageURL: URL? {
     return nil
   }
 
-  public var thumbnailImageURL: NSURL? {
+  public var thumbnailImageURL: URL? {
     return nil
   }
   

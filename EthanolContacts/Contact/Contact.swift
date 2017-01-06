@@ -26,7 +26,7 @@
 
 import UIKit
 
-public struct ContactProperty: OptionSetType {
+public struct ContactProperty: OptionSet {
   
   public let rawValue: Int
   
@@ -84,9 +84,9 @@ public struct ContactProperty: OptionSetType {
 *  Define the type of a contact
 */
 @objc public enum ContactType: Int {
-  case Unknown
-  case Person
-  case Organization
+  case unknown
+  case person
+  case organization
 }
 
 /**
@@ -117,13 +117,13 @@ public struct ContactProperty: OptionSetType {
   var note: String { get }
   
   var emails: Array<String>? { get }
-  var birthdayDate: NSDate? { get }
+  var birthdayDate: Date? { get }
   
   var addresses: Array<String>? { get }
   
   var kind: ContactType { get }
   
-  var dateList: Array<NSDate>? { get }
+  var dateList: Array<Date>? { get }
   
   var phone: Array<String>? { get }
   
@@ -135,9 +135,9 @@ public struct ContactProperty: OptionSetType {
   var relatedNames: Array<String>? { get }
   
   var originalImage: UIImage? { get }
-  var originalImageURL: NSURL? { get }
+  var originalImageURL: URL? { get }
   
   var thumbnailImage: UIImage? { get }
-  var thumbnailImageURL: NSURL? { get }
+  var thumbnailImageURL: URL? { get }
 }
 

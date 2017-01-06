@@ -28,48 +28,48 @@ import Foundation
 import AddressBook
 
 @available(iOS 8.0, *)
-final class AddressBookFetcher:NSObject, ContactFetcher {
+final class AddressBookFetcher: NSObject, ContactFetcher {
 
 	static let internalAddressBookFetcher = AddressBookFetcher()
 	static var contactFetcher: ContactFetcher {
 		return internalAddressBookFetcher
 	}
 
-	var addressBook:ABAddressBookRef?
+	var addressBook: ABAddressBook?
 
-	var isAuthorized:Bool {
-		return ABAddressBookGetAuthorizationStatus() == .Authorized && (addressBook != nil)
+	var isAuthorized: Bool {
+		return ABAddressBookGetAuthorizationStatus() == .authorized && (addressBook != nil)
 	}
 
-	func fetchContactsForProperties(properties: ContactProperty, success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
+	public func fetchContacts(for properties: ContactProperty, success: @escaping (Array<Contact>) -> Void, failure: @escaping (Error?) -> Void) {
 		if isAuthorized {
 			do {
 				let contacts = try self.contactsFromAddressBookWithGivenProperties(properties)
 
-				dispatch_async(dispatch_get_main_queue(), {
-					success(contacts: contacts)
+				DispatchQueue.main.async(execute: {
+					success(contacts)
 				})
 			} catch {
-				dispatch_async(dispatch_get_main_queue(), {
-					failure(error: self.errorWithInfo("something happened", "contacts werent fetched"))
+				DispatchQueue.main.async(execute: {
+					failure(self.errorWithInfo("something happened", "contacts werent fetched"))
 				})
 			}
 		} else {
-			authorizeWithCompletion(success: { () -> () in
-				self.fetchContactsForProperties(properties, success: success, failure: failure)
+			authorize(success: { () -> () in
+				self.fetchContacts(for: properties, success: success, failure: failure)
 				}, failure: { (error) in
-					dispatch_async(dispatch_get_main_queue(), {
-						failure(error: error)
+					DispatchQueue.main.async(execute: {
+						failure(error)
 					})
 			})
 		}
 	}
 
-	func authorizeWithCompletion(success successBlock: ETHContactFetcherAuthorizeSuccessBlock, failure: ETHContactFetcherFailureBlock) {
+	public func authorize(success: @escaping () -> (), failure: @escaping (Error?) -> Void) {
 
 		guard let thisAddressBook = ABAddressBookCreate().takeRetainedValue() as ABAddressBook? else {
-			dispatch_async(dispatch_get_main_queue(), {
-				failure(error: self.errorWithInfo("EthanolContactAuthorizationFailed", "EthanolContactAddressBookFailedToCreate"))
+			DispatchQueue.main.async(execute: {
+				failure(self.errorWithInfo("EthanolContactAuthorizationFailed", "EthanolContactAddressBookFailedToCreate"))
 			})
 			return
 		}
@@ -77,31 +77,31 @@ final class AddressBookFetcher:NSObject, ContactFetcher {
 		addressBook = thisAddressBook
 
 		if(isAuthorized) {
-			dispatch_async(dispatch_get_main_queue(), {
-				successBlock()
+			DispatchQueue.main.async(execute: {
+				success()
 			})
 		} else {
-			let completionHandler:ABAddressBookRequestAccessCompletionHandler = { (granted:Bool, error:CFError!) in
-				dispatch_async(dispatch_get_main_queue(), {
+			let completionHandler:ABAddressBookRequestAccessCompletionHandler = { (granted: Bool, error: CFError!) in
+				DispatchQueue.main.async(execute: {
 					if let error = error {
-						failure(error: (error as NSError))
+						failure(self.errorWithInfo(error.localizedDescription, "EthanolContactRequestAccessError"))
 					} else if(!granted) {
-						failure(error: self.errorWithInfo("EthanolContactFetchFailed", "EthanolContactPhoneNotAllowed"))
+						failure(self.errorWithInfo("EthanolContactFetchFailed", "EthanolContactPhoneNotAllowed"))
 					} else {
-						successBlock()
+						success()
 					}
 				})
-			}
+			} as! ABAddressBookRequestAccessCompletionHandler
 			ABAddressBookRequestAccessWithCompletion(thisAddressBook, completionHandler)
 		}
 	}
 
-	func errorWithInfo(description:String, _ reason:String) -> NSError {
+	func errorWithInfo(_ description:String, _ reason:String) -> NSError {
 		let userInfo = [NSLocalizedDescriptionKey: description, NSLocalizedFailureReasonErrorKey: reason]
 		return NSError(domain: "com.fueled.Ethanol", code: 1214, userInfo: userInfo)
 	}
 
-	func contactsFromAddressBookWithGivenProperties(propertiesFlag:ContactProperty) throws -> [Contact] {
+	func contactsFromAddressBookWithGivenProperties(_ propertiesFlag:ContactProperty) throws -> [Contact] {
 
 		guard let addressBook = addressBook else {
 			throw self.errorWithInfo("EthanolContactFetchFailed", "SomethingWentWrong")
@@ -110,7 +110,7 @@ final class AddressBookFetcher:NSObject, ContactFetcher {
 		var contacts = [Contact]()
 		if let people = ABAddressBookCopyArrayOfAllPeople(addressBook).takeRetainedValue() as NSArray? {
 			for person in people {
-				if let person = person as ABRecordRef? {
+				if let person = person as ABRecord? {
 					let contact = PhoneContact(person: person, withProperties:propertiesFlag)
 					contacts.append(contact)
 				}
@@ -119,4 +119,3 @@ final class AddressBookFetcher:NSObject, ContactFetcher {
 		return contacts
 	}
 }
-

@@ -27,8 +27,8 @@
 import UIKit
 
 public typealias ETHContactFetcherAuthorizeSuccessBlock = () -> ()
-public typealias ETHContactFetcherSuccessBlock = (contacts: Array<Contact>) -> Void
-public typealias ETHContactFetcherFailureBlock = (error: NSError?) -> Void
+public typealias ETHContactFetcherSuccessBlock = (_ contacts: Array<Contact>) -> Void
+public typealias ETHContactFetcherFailureBlock = (_ error: Error?) -> Void
 
 /**
 *  A protocol designed to be followed, for fetching contacts.
@@ -49,20 +49,19 @@ public protocol ContactFetcher {
   *  @return A BOOL indicating whether the user is authorized or not.
   */
 
-  var isAuthorized:Bool { get }
-
+  var isAuthorized: Bool { get }
 
   /**
   *  Allow to fetch contacts.
   *  The fetched contacts will only have the properties set
   *
   *  @discussion This method will call authorizeWithSuccess internally if the user is not yet authorized.
-  *  @param propertiesFlag The properties that should be retrieved from each contacts.
+  *  @param properties		 The properties that should be retrieved from each contacts.
   *  @param success        Block called when the contacts have been successfuly fetched.
   *  @param failure        Block called when the contacts haven't been successfuly fetched.
   */
 
-  func fetchContactsForProperties(properties: ContactProperty, success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock);
+	func fetchContacts(for properties: ContactProperty, success: @escaping (Array<Contact>) -> Void, failure: @escaping (Error?) -> Void);
 
   /**
   *  Pre-authorize a user.
@@ -73,7 +72,7 @@ public protocol ContactFetcher {
   *  @param failure Block called when the user hasn't been successfuly authorized.
   */
 
-  func authorizeWithCompletion(success success: ETHContactFetcherAuthorizeSuccessBlock, failure: ETHContactFetcherFailureBlock);
+	func authorize(success: @escaping () -> (), failure: @escaping (Error?) -> Void);
 }
 
 /** Default implementation of fetchContactsWithCompletion to return contacts with all properties */
@@ -87,7 +86,7 @@ extension ContactFetcher {
 	*  @param failure Block called when the contacts haven't been successfuly fetched.
 	*/
 
- public func fetchContactsWithCompletion(success success: ETHContactFetcherSuccessBlock, failure: ETHContactFetcherFailureBlock) {
-    self.fetchContactsForProperties(ContactProperty.AllProperties, success: success, failure: failure)
+ public func fetchContactsWithCompletion(success: @escaping ETHContactFetcherSuccessBlock, failure: @escaping ETHContactFetcherFailureBlock) {
+		self.fetchContacts(for: ContactProperty.AllProperties, success: success, failure: failure)
   }
 }
